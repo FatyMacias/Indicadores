@@ -41,7 +41,7 @@ if(isset($_POST['submit'])){
 			$filas = mysqli_num_rows ($resultado); 
 
 			if ($filas>0){
-       			header("location: indicadores.html"); 
+       			header("location: inicio.html"); 
 
 			}
 			else{
