@@ -50,7 +50,7 @@ $result = $statement->fetchAll();
                     </div>
                 </div>
                 <div class="panel-body">
-                    <div id="chart_area" style="width: 1000px; height: 620px;"></div>
+                    <div id="chart_area" style="width: 1000px; height: 800px;"></div>
                 </div>
             </div>
         </div>  

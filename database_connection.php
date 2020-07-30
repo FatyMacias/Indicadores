@@ -2,7 +2,7 @@
 
 //database_connection.php
 
-$connect = new PDO("mysql:host=localhost;dbname=indicadores", "root", "");
+$connect = new PDO("mysql:host=localhost;dbname=in", "root", "");
 
 
 

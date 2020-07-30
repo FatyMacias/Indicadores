@@ -93,18 +93,19 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="nav navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Inicio</a>
+
+                    <a class="nav-link" href="inicio.php"> <ion-icon name="home-outline"></ion-icon> Inicio</a>
                 </li>
             
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Cerrar Sesión</a>
+                    <a class="nav-link" href="logout.php"><ion-icon name="exit-outline"></ion-icon>Cerrar Sesión</a>
                 </li>
               </ul>
             </div>
           </div>
         </nav>
         <body>
-          <center><h1>Indicadores</h1></center>
+          <center><h1>INDICADORES</h1></center>
           <div>
                    
                 <select  class="form-control form-control-sm" name="" style="width: 300px; height: 35px;" id="year" onchange="selectCambia()">
@@ -114,7 +115,10 @@
                   <option value="2022">2022</option>
                 </select>
           </div>
-          <div class=""><canvas id="myChart" style="width: 1000px; height: 320px;"></canvas></div>
+
+          
+          <div class=""><canvas id="myChart" style="width: 500px; height: 200px;"></canvas></div>
+
 
         <!-- <h2 class="mb-4">Sidebar #01</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -126,6 +130,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
     <script src="indicador.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/popper.js"></script>
