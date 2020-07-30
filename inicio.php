@@ -188,6 +188,8 @@ $result = $statement->fetchAll();
 <script type="text/javascript">
 google.charts.load('current', {packages: ['corechart', 'bar']});
 google.charts.setOnLoadCallback();
+
+
 // peticion a la base de datos grafica 1
 function load_conceptowise_data(id, title)
 {
@@ -218,6 +220,7 @@ function load_conceptowise2_data(id, title)
         }
     });
 }
+
 // dibujar grafica 1
 function drawMonthwiseChart(chart_data, chart_main_title)
 {
@@ -225,19 +228,38 @@ function drawMonthwiseChart(chart_data, chart_main_title)
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Quincenas');
     data.addColumn('number', 'Importe');
+    data.addColumn({
+               type: 'string',
+               role: 'style'
+           });
+
+
     $.each(jsonData, function(i, jsonData){
         var concepto = jsonData.concepto;
         var importe = parseFloat($.trim(jsonData.importe));
-        data.addRows([[concepto, importe]]);
+        var style = jsonData.style;
+        data.addRows([[concepto, importe, style]]);
     });
+    //var Color = '#'+Math.floor(Math.random()*16777215).toString(16);
+
+    data.setValue(0, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(1, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(2, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(3, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(4, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(5, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(6, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(7, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
     var options = {
         title:chart_main_title,
+        
         hAxis: {
             title: "Quincenas"
         },
         vAxis: {
             title: 'Importe'
         }
+
     };
 
     var chart = new google.visualization.ColumnChart(document.getElementById('chart_area'));
@@ -250,11 +272,35 @@ function drawMonthwiseChart2(chart_data, chart_main_title)
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Quincenas');
     data.addColumn('number', 'Importe');
+    data.addColumn({
+               type: 'string',
+               role: 'style'
+           });
     $.each(jsonData, function(i, jsonData){
         var concepto = jsonData.concepto;
         var importe = parseFloat($.trim(jsonData.importe));
-        data.addRows([[concepto, importe]]);
+        var style = jsonData.style;
+        data.addRows([[concepto, importe, style]]);
+
+
     });
+    data.setValue(0, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(1, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(2, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(3, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(4, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(5, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(6, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(7, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(8, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(9, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(10, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(11, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(12, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(13, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    data.setValue(14, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    
+
     var options = {
         title:chart_main_title,
         hAxis: {
