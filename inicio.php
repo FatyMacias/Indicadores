@@ -240,7 +240,7 @@ function drawMonthwiseChart(chart_data, chart_main_title)
         var style = jsonData.style;
         data.addRows([[concepto, importe, style]]);
     });
-    //var Color = '#'+Math.floor(Math.random()*16777215).toString(16);
+   
 
     data.setValue(0, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
     data.setValue(1, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
