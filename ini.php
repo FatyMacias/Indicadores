@@ -1,14 +1,29 @@
 <?php  
 
+//index.php
+/*
+jeje, me tarde un shingo pero al fin pude generar una grafica dynamica que actualize la info de la grafica sin tener que refrescar la pagina, solo hay que realizar una sellecion  en este caso por id te saca la grafica de el importe de cada concepto individualmente, jaja olv
+
+
+*/
 include("bd/database_connection.php");
 
 $query = "SELECT SUBSTRING(qna_pago,1,4) AS 'year' FROM indicador GROUP BY year DESC";
+$queryC = "SELECT cve_cpto AS 'concepto' FROM `cat_conceptos`";
+//$query = "SELECT SUBSTRING(qna_pago,1,4) AS 'year' FROM indicador GROUP BY year DESC";
+$queryM = "SELECT mes,qna_pago,SUM(importe) AS 'total' FROM indicador JOIN cat_mes ON indicador.qna_pago = cat_mes.id_quin GROUP BY mes";
 
 $statement = $connect->prepare($query);
+$statementC = $connect->prepare($queryC);
+$statementM = $connect->prepare($queryM);
 
 $statement->execute();
+$statementC->execute();
+$statementM->execute();
 
 $result = $statement->fetchAll();
+$resultC = $statementC->fetchAll();
+$resultM = $statementM->fetchAll();
 
 ?>  
 
@@ -34,28 +49,35 @@ $result = $statement->fetchAll();
       <nav id="sidebar">
       <center><a class="navbar-brand" href="#">INDICADORES</a></center>  
         <div class="p-4 pt-5">
-          <a href="" class="img logo thumbnailmb-5" style="background-image: url(images/zac.png);"></a>
-          <br>
-          <br>
+          <a href="#" class="img logo thumbnailmb-5" style="background-image: url(images/zac.png);"></a>
           <ul class="list-unstyled components mb-5">
-            <li>
-              <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Global</a>
-              <ul class="collapse list-unstyled" id="pageSubmenu">
+
+
+            <li class="active">
+              <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+              <ul class="collapse list-unstyled" id="homeSubmenu">
                 <li>
-                    <a href="grafica_concepto.html">Por concepto</a>
+                    <a href="#" onclick="openMenu('general')">General</a>
+                </li>
+                <li>
+                    <a href="#" onclick="openMenu('conceptos')">Por concepto</a>
                 </li>
                 <li>
                     <a href="#">Por banco</a>
                 </li>
                 <li>
-                    <a href="#">Por género</a>
+                    <a href="#">Por genero</a>
                 </li>
               </ul>
             </li>
-            
+
+
             <li>
-              <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Por subsistema</a>
-              <ul class="collapse list-unstyled" id="pageSubmenu2">
+                <a href="#">About</a>
+            </li>
+            <li>
+              <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
+              <ul class="collapse list-unstyled" id="pageSubmenu">
                 <li>
                     <a href="#">Page 1</a>
                 </li>
@@ -66,10 +88,22 @@ $result = $statement->fetchAll();
                     <a href="#">Page 3</a>
                 </li>
               </ul>
-            </li> 
+            </li>
+            <li>
+              <a href="#">Portfolio</a>
+            </li>
+            <li>
+              <a href="#">Contact</a>
+            </li>
           </ul>
 
-         </div>
+          <div class="footer">
+            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+              Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
+              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+          </div>
+
+        </div>
       </nav>
       
 
@@ -92,23 +126,28 @@ $result = $statement->fetchAll();
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="nav navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Inicio</a>
+                    <a class="nav-link" href="#">Home</a>
                 </li>
-                
                 <li class="nav-item">
-                    <a class="nav-link" href="logout.php">Cerrar sesión</a>
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Portfolio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
                 </li>
               </ul>
             </div>
           </div>
         </nav>
-        
-          <center><h1>INDICADORES</h1></center>
+        <div id="general" class="w3-container menu">
+          <center><h1>Indicadores</h1></center>
           <div>
       
-
-                <select name="id" class="form-control" id="id" style="width: 300px; height: 35px;">
-                            <option value="">Selecciona el año </option>
+              
+                <select name="id" class="form-control" id="id">
+                            <option value="">Selecciona id</option>
                             <?php
                             foreach($result as $row)
                             {
@@ -118,22 +157,74 @@ $result = $statement->fetchAll();
                 </select>
           </div>
 
-          <br>
-          <br>
           <div class="panel-body">
            
-              <div id="chart_area" style="width: 900px; height: 500px;"></div>
+              <div style="width: 200px; height: 10px;"></div>
+            
+          </div>
+          <div class="panel-body">
+           
+              <div id="chart_area" style="width: 1200px; height: 500px;"></div>
             
           </div>
           
           
           <div class="panel-body">
             
-              <div id="chart_area2" style="width: 900px; height: 500px;"></div>
+              <div id="chart_area2" style="width: 1200px; height: 500px;"></div>
               
           </div>
           
-          
+          </div>
+
+
+          <div id="conceptos" class="w3-container menu" style="display:none">
+            <center><h1>Por Conceptos</h1></center>
+          <div>
+      
+              
+                <select name="idc" class="form-control" id="idc">
+                            <option value="">Seleccionar Concepto</option>
+                            <?php
+                            foreach($resultC as $row)
+                            {
+                                echo '<option value="'.$row["concepto"].'">'.$row["concepto"].'</option>';
+                            }
+                            ?>
+                </select>
+
+                
+                <select name="idm" class="form-control" id="idm">
+                            <option value="">Seleccionar Mes</option>
+                            <?php
+                            foreach($resultM as $row)
+                            {
+                                echo '<option value="'.$row["mes"].'">'.$row["mes"].'</option>';
+                            }
+                            ?>
+                </select>
+          </div>
+          <div class="panel-body">
+           
+              <div style="width: 200px; height: 10px;"></div>
+            
+          </div>
+          <div class="panel-body">
+           
+              <div id="chart_area3" style="width: 1200px; height: 500px;"></div>
+            
+          </div>
+          </div>
+          <script>
+            function openMenu(menuName) {
+              var i;
+              var x = document.getElementsByClassName("menu");
+              for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";  
+                  }
+              document.getElementById(menuName).style.display = "block";  
+            }
+          </script>
           
           
 
@@ -194,6 +285,21 @@ function load_conceptowise2_data(id, title)
         }
     });
 }
+////////////////////////////
+function load_conceptowise3_data(idc, idm, title)
+{
+    var temp_title = title + ' '+idc+''+''+idm+'';
+    $.ajax({
+        url:"bd/fetch_concepto.php",
+        method:"POST",
+        data:{idc:idc, idm:idm},
+        dataType:"JSON",
+        success:function(data)
+        {
+            drawMonthwiseChart3(data, temp_title);
+        }
+    });
+}
 
 // dibujar grafica 1
 function drawMonthwiseChart(chart_data, chart_main_title)
@@ -226,7 +332,7 @@ function drawMonthwiseChart(chart_data, chart_main_title)
     data.setValue(7, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
     var options = {
         title:chart_main_title,
-        
+        legend: 'none',
         hAxis: {
             title: "Quincenas"
         },
@@ -234,6 +340,7 @@ function drawMonthwiseChart(chart_data, chart_main_title)
             title: 'Importe',
             format: 'currency'
         }
+
 
     };
 
@@ -278,6 +385,7 @@ function drawMonthwiseChart2(chart_data, chart_main_title)
 
     var options = {
         title:chart_main_title,
+        legend: 'none',
         hAxis: {
             title: "Quincenas"
         },
@@ -291,6 +399,40 @@ function drawMonthwiseChart2(chart_data, chart_main_title)
     chart.draw(data, options);
 }
 
+function drawMonthwiseChart3(chart_data, chart_main_title)
+{
+    var jsonData = chart_data;
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Quincenas');
+    data.addColumn('number', 'Importe $');
+    data.addColumn({
+               type: 'string',
+               role: 'style'
+           });
+    $.each(jsonData, function(i, jsonData){
+        var concepto = jsonData.concepto;
+        var importe = parseFloat($.trim(jsonData.importe));
+        var style = jsonData.style;
+        data.addRows([[concepto, importe, style]]);
+
+
+    });
+
+    var options = {
+        title:chart_main_title,
+        legend: 'none',
+        hAxis: {
+            title: "Quincenas"
+        },
+        vAxis: {
+            title: 'Importe',
+            format: 'currency'
+        }
+    };
+
+    var chart = new google.visualization.ColumnChart(document.getElementById('chart_area3'));
+    chart.draw(data, options);
+}
 </script>
 
 
@@ -302,6 +444,7 @@ $(document).ready(function(){
         var id = $(this).val();
         if(id != '')
         {
+            alert("The text has been changed.");
             load_conceptowise_data(id, 'Importe Por Cada Mes, Quincenas del: ');
             load_conceptowise2_data(id, 'Importe Por Cada Quincena, Quincenas del: ');
         }
@@ -310,3 +453,23 @@ $(document).ready(function(){
 });
 
 </script>
+
+<script>
+    // Detectar seleccion del select option
+$(document).ready(function(){
+
+    $('#idc, #idm').change(function(){
+        var idc = $('#idc').val();
+        var idm = $('#idm').val();
+        if(idc != '' && idm != '')
+        {
+            alert("The text has been changed.");
+            
+            load_conceptowise3_data(idc, idm, 'Importe Por Cada Year, Concepto: ');
+        }
+    });
+
+});
+
+</script>
+
