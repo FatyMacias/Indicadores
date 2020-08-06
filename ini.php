@@ -1,12 +1,6 @@
 <?php  
 
-//index.php
-/*
-jeje, me tarde un shingo pero al fin pude generar una grafica dynamica que actualize la info de la grafica sin tener que refrescar la pagina, solo hay que realizar una sellecion  en este caso por id te saca la grafica de el importe de cada concepto individualmente, jaja olv
-
-
-*/
-include("bd/database_connection.php");
+Include("bd/database_connection.php");
 
 $query = "SELECT SUBSTRING(qna_pago,1,4) AS 'year' FROM indicador GROUP BY year DESC";
 $queryC = "SELECT cve_cpto AS 'concepto' FROM `cat_conceptos`";
@@ -47,23 +41,22 @@ $resultM = $statementM->fetchAll();
     
     <div class="wrapper d-flex align-items-stretch">
       <nav id="sidebar">
-      <center><a class="navbar-brand" href="#">INDICADORES</a></center>  
+      <center><a class="navbar-brand" href="#">INICIO</a></center>  
         <div class="p-4 pt-5">
           <a href="#" class="img logo thumbnailmb-5" style="background-image: url(images/zac.png);"></a>
           <ul class="list-unstyled components mb-5">
 
-
             <li class="active">
-              <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+              <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Ver gráficas</a>
               <ul class="collapse list-unstyled" id="homeSubmenu">
                 <li>
-                    <a href="#" onclick="openMenu('general')">General</a>
+                    <a href="" onclick="openMenu('general')">Global</a>
                 </li>
                 <li>
                     <a href="#" onclick="openMenu('conceptos')">Por concepto</a>
                 </li>
                 <li>
-                    <a href="#">Por banco</a>
+                    <a href="#">Por banco</a> 
                 </li>
                 <li>
                     <a href="#">Por genero</a>
@@ -72,11 +65,9 @@ $resultM = $statementM->fetchAll();
             </li>
 
 
+            
             <li>
-                <a href="#">About</a>
-            </li>
-            <li>
-              <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
+              <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Por Subistema</a>
               <ul class="collapse list-unstyled" id="pageSubmenu">
                 <li>
                     <a href="#">Page 1</a>
@@ -89,20 +80,7 @@ $resultM = $statementM->fetchAll();
                 </li>
               </ul>
             </li>
-            <li>
-              <a href="#">Portfolio</a>
-            </li>
-            <li>
-              <a href="#">Contact</a>
-            </li>
-          </ul>
-
-          <div class="footer">
-            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-              Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
-              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-          </div>
-
+           </ul>
         </div>
       </nav>
       
@@ -126,23 +104,17 @@ $resultM = $statementM->fetchAll();
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="nav navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" href="#">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link" href="logout.php">Cerrar sesión</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Portfolio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-              </ul>
+               </ul>
             </div>
           </div>
         </nav>
         <div id="general" class="w3-container menu">
-          <center><h1>Indicadores</h1></center>
+          <center><h1>INDICADORES</h1></center>
           <div>
       
               
