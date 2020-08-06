@@ -9,12 +9,21 @@ jeje, me tarde un shingo pero al fin pude generar una grafica dynamica que actua
 include("bd/database_connection.php");
 
 $query = "SELECT SUBSTRING(qna_pago,1,4) AS 'year' FROM indicador GROUP BY year DESC";
+$queryC = "SELECT cve_cpto AS 'concepto' FROM `cat_conceptos`";
+//$query = "SELECT SUBSTRING(qna_pago,1,4) AS 'year' FROM indicador GROUP BY year DESC";
+$queryM = "SELECT mes,qna_pago,SUM(importe) AS 'total' FROM indicador JOIN cat_mes ON indicador.qna_pago = cat_mes.id_quin GROUP BY mes";
 
 $statement = $connect->prepare($query);
+$statementC = $connect->prepare($queryC);
+$statementM = $connect->prepare($queryM);
 
 $statement->execute();
+$statementC->execute();
+$statementM->execute();
 
 $result = $statement->fetchAll();
+$resultC = $statementC->fetchAll();
+$resultM = $statementM->fetchAll();
 
 ?>  
 
@@ -48,7 +57,10 @@ $result = $statement->fetchAll();
               <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
               <ul class="collapse list-unstyled" id="homeSubmenu">
                 <li>
-                    <a href="#">Por concepto</a>
+                    <a href="#" onclick="openMenu('general')">General</a>
+                </li>
+                <li>
+                    <a href="#" onclick="openMenu('conceptos')">Por concepto</a>
                 </li>
                 <li>
                     <a href="#">Por banco</a>
@@ -129,7 +141,7 @@ $result = $statement->fetchAll();
             </div>
           </div>
         </nav>
-        
+        <div id="general" class="w3-container menu">
           <center><h1>Indicadores</h1></center>
           <div>
       
@@ -145,7 +157,11 @@ $result = $statement->fetchAll();
                 </select>
           </div>
 
-          
+          <div class="panel-body">
+           
+              <div style="width: 200px; height: 10px;"></div>
+            
+          </div>
           <div class="panel-body">
            
               <div id="chart_area" style="width: 1200px; height: 500px;"></div>
@@ -159,7 +175,56 @@ $result = $statement->fetchAll();
               
           </div>
           
-          
+          </div>
+
+
+          <div id="conceptos" class="w3-container menu" style="display:none">
+            <center><h1>Por Conceptos</h1></center>
+          <div>
+      
+              
+                <select name="idc" class="form-control" id="idc">
+                            <option value="">Seleccionar Concepto</option>
+                            <?php
+                            foreach($resultC as $row)
+                            {
+                                echo '<option value="'.$row["concepto"].'">'.$row["concepto"].'</option>';
+                            }
+                            ?>
+                </select>
+
+                
+                <select name="idm" class="form-control" id="idm">
+                            <option value="">Seleccionar Mes</option>
+                            <?php
+                            foreach($resultM as $row)
+                            {
+                                echo '<option value="'.$row["mes"].'">'.$row["mes"].'</option>';
+                            }
+                            ?>
+                </select>
+          </div>
+          <div class="panel-body">
+           
+              <div style="width: 200px; height: 10px;"></div>
+            
+          </div>
+          <div class="panel-body">
+           
+              <div id="chart_area3" style="width: 1200px; height: 500px;"></div>
+            
+          </div>
+          </div>
+          <script>
+            function openMenu(menuName) {
+              var i;
+              var x = document.getElementsByClassName("menu");
+              for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";  
+                  }
+              document.getElementById(menuName).style.display = "block";  
+            }
+          </script>
           
           
 
@@ -220,6 +285,21 @@ function load_conceptowise2_data(id, title)
         }
     });
 }
+////////////////////////////
+function load_conceptowise3_data(idc, idm, title)
+{
+    var temp_title = title + ' '+idc+''+''+idm+'';
+    $.ajax({
+        url:"bd/fetch_concepto.php",
+        method:"POST",
+        data:{idc:idc, idm:idm},
+        dataType:"JSON",
+        success:function(data)
+        {
+            drawMonthwiseChart3(data, temp_title);
+        }
+    });
+}
 
 // dibujar grafica 1
 function drawMonthwiseChart(chart_data, chart_main_title)
@@ -227,7 +307,7 @@ function drawMonthwiseChart(chart_data, chart_main_title)
     var jsonData = chart_data;
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Quincenas');
-    data.addColumn('number', 'Importe');
+    data.addColumn('number', 'Importe $');
     data.addColumn({
                type: 'string',
                role: 'style'
@@ -252,13 +332,15 @@ function drawMonthwiseChart(chart_data, chart_main_title)
     data.setValue(7, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
     var options = {
         title:chart_main_title,
-        
+        legend: 'none',
         hAxis: {
             title: "Quincenas"
         },
         vAxis: {
-            title: 'Importe'
+            title: 'Importe',
+            format: 'currency'
         }
+
 
     };
 
@@ -271,7 +353,7 @@ function drawMonthwiseChart2(chart_data, chart_main_title)
     var jsonData = chart_data;
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Quincenas');
-    data.addColumn('number', 'Importe');
+    data.addColumn('number', 'Importe $');
     data.addColumn({
                type: 'string',
                role: 'style'
@@ -303,11 +385,13 @@ function drawMonthwiseChart2(chart_data, chart_main_title)
 
     var options = {
         title:chart_main_title,
+        legend: 'none',
         hAxis: {
             title: "Quincenas"
         },
         vAxis: {
-            title: 'Importe'
+            title: 'Importe',
+            format: 'currency'
         }
     };
 
@@ -315,6 +399,40 @@ function drawMonthwiseChart2(chart_data, chart_main_title)
     chart.draw(data, options);
 }
 
+function drawMonthwiseChart3(chart_data, chart_main_title)
+{
+    var jsonData = chart_data;
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Quincenas');
+    data.addColumn('number', 'Importe $');
+    data.addColumn({
+               type: 'string',
+               role: 'style'
+           });
+    $.each(jsonData, function(i, jsonData){
+        var concepto = jsonData.concepto;
+        var importe = parseFloat($.trim(jsonData.importe));
+        var style = jsonData.style;
+        data.addRows([[concepto, importe, style]]);
+
+
+    });
+
+    var options = {
+        title:chart_main_title,
+        legend: 'none',
+        hAxis: {
+            title: "Quincenas"
+        },
+        vAxis: {
+            title: 'Importe',
+            format: 'currency'
+        }
+    };
+
+    var chart = new google.visualization.ColumnChart(document.getElementById('chart_area3'));
+    chart.draw(data, options);
+}
 </script>
 
 
@@ -326,6 +444,7 @@ $(document).ready(function(){
         var id = $(this).val();
         if(id != '')
         {
+            alert("The text has been changed.");
             load_conceptowise_data(id, 'Importe Por Cada Mes, Quincenas del: ');
             load_conceptowise2_data(id, 'Importe Por Cada Quincena, Quincenas del: ');
         }
@@ -334,3 +453,23 @@ $(document).ready(function(){
 });
 
 </script>
+
+<script>
+    // Detectar seleccion del select option
+$(document).ready(function(){
+
+    $('#idc, #idm').change(function(){
+        var idc = $('#idc').val();
+        var idm = $('#idm').val();
+        if(idc != '' && idm != '')
+        {
+            alert("The text has been changed.");
+            
+            load_conceptowise3_data(idc, idm, 'Importe Por Cada Year, Concepto: ');
+        }
+    });
+
+});
+
+</script>
+
