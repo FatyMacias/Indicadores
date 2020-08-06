@@ -35,7 +35,7 @@
                     "saturation": 36
                 },
                 {
-                    "color": "#000000"
+                    "color": "#FFFFFF"
                 },
                 {
                     "lightness": 40

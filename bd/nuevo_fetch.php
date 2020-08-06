@@ -7,9 +7,9 @@ include('database_connection.php');
 if(isset($_POST["id"]))
 {
  $query = "
- SELECT mes,qna_pago,SUM(importe) AS 'total' FROM indicador JOIN cat_mes ON indicador.qna_pago = cat_mes.id_quin
+ SELECT SUBSTRING(qna_pago,5,6),SUM(importe) AS 'total' FROM indicador
  WHERE SUBSTRING(qna_pago,1,4) = '".$_POST["id"]."' 
- GROUP BY mes ASC 
+ GROUP BY qna_pago ASC 
  ";
  $statement = $connect->prepare($query);
  $statement->execute();
@@ -19,7 +19,7 @@ if(isset($_POST["id"]))
  foreach($result as $row)
  {
   $output[] = array(
-   'concepto'   => $row["mes"],
+   'concepto'   => $row["SUBSTRING(qna_pago,5,6)"],
    'importe'  => floatval($row["total"])
   );
  }

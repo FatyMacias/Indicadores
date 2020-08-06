@@ -41,7 +41,7 @@ if(isset($_POST['submit'])){
 			$filas = mysqli_num_rows ($resultado); 
 
 			if ($filas>0){
-       			header("location: inicio.php"); 
+       			header("location: ini.php"); 
 
 			}
 			else{
