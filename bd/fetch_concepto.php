@@ -9,7 +9,7 @@ if(isset($_POST["idc"]) && isset($_POST["idm"]) )
  $query = "
  SELECT mes,concepto,SUBSTRING(qna_pago,1,4),SUM(importe) AS 'total' FROM indicador JOIN cat_mes ON indicador.qna_pago = cat_mes.id_quin
  WHERE concepto = '".$_POST["idc"]."' AND mes = '".$_POST["idm"]."'
- GROUP BY mes ASC 
+ GROUP BY SUBSTRING(qna_pago,1,4) ASC 
  ";
  $statement = $connect->prepare($query);
  $statement->execute();
