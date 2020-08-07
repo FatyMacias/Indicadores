@@ -8,7 +8,7 @@ jeje, me tarde un shingo pero al fin pude generar una grafica dynamica que actua
 */
 include("bd/database_connection.php");
 
-$query = "SELECT SUBSTRING(qna_pago,1,4) AS 'year' FROM indicador GROUP BY year DESC";
+$query = "SELECT SUBSTRING(qna_pago,1,4) AS 'year' FROM indicador GROUP BY year ASC";
 $queryC = "SELECT cve_cpto AS 'concepto' FROM `cat_conceptos`";
 //$query = "SELECT SUBSTRING(qna_pago,1,4) AS 'year' FROM indicador GROUP BY year DESC";
 $queryM = "SELECT * FROM `cat_mes` GROUP BY MES ORDER BY id_quin";
@@ -267,6 +267,10 @@ function load_conceptowise_data(id, title)
         success:function(data)
         {
             drawMonthwiseChart(data, temp_title);
+        },
+        error: function(data)
+        {
+            alert("No hay Datos");
         }
     });
 }
@@ -282,6 +286,10 @@ function load_conceptowise2_data(id, title)
         success:function(data)
         {
             drawMonthwiseChart2(data, temp_title);
+        },
+        error: function(data)
+        {
+            alert("No hay Datos");
         }
     });
 }
@@ -345,7 +353,13 @@ function drawMonthwiseChart(chart_data, chart_main_title)
         vAxis: {
             title: 'Importe',
             format: 'currency'
-        }
+        },
+        chartArea: {
+        backgroundColor: {
+        stroke: '#008f39',
+        strokeWidth: 3
+    }
+}
 
 
     };
@@ -400,7 +414,14 @@ function drawMonthwiseChart2(chart_data, chart_main_title)
         vAxis: {
             title: 'Importe',
             format: 'currency'
-        }
+        },
+        chartArea: {
+        backgroundColor: {
+        stroke: '#008f39',
+        strokeWidth: 3
+    }
+}
+
     };
 
     var chart = new google.visualization.ColumnChart(document.getElementById('chart_area2'));
@@ -435,7 +456,14 @@ function drawMonthwiseChart3(chart_data, chart_main_title)
         vAxis: {
             title: 'Importe',
             format: 'currency'
-        }
+        },
+        chartArea: {
+        backgroundColor: {
+        stroke: '#008f39',
+        strokeWidth: 3
+    }
+}
+
     };
 
     var chart = new google.visualization.ColumnChart(document.getElementById('chart_area3'));
