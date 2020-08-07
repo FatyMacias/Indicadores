@@ -104,7 +104,9 @@ $resultM = $statementM->fetchAll();
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="nav navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Inicio</a>
+                <i class="home icon"></i>
+
+                    <a class="nav-link" href="#">Inicio <i class="home icon"></i></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="logout.php">Cerrar sesión</a>
@@ -118,8 +120,8 @@ $resultM = $statementM->fetchAll();
           <div>
       
               
-                <select name="id" class="form-control" id="id">
-                            <option value="">Selecciona id</option>
+                <select name="id" class="form-control" id="id" style="width: 300px; height: 35px;">
+                            <option value="">Seleccionar año</option>
                             <?php
                             foreach($result as $row)
                             {
@@ -151,7 +153,7 @@ $resultM = $statementM->fetchAll();
 
 
           <div id="conceptos" class="w3-container menu" style="display:none">
-            <center><h1>Por Conceptos</h1></center>
+            <center><h1>INDICADORES POR CONCEPTOS</h1></center>
           <div>
       
               
@@ -218,6 +220,13 @@ $resultM = $statementM->fetchAll();
     <script src="js/popper.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+<script src="semantic/dist/semantic.min.js"></script>
+
   </body>
 </html>
 
