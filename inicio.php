@@ -9,9 +9,9 @@ jeje, me tarde un shingo pero al fin pude generar una grafica dynamica que actua
 include("bd/database_connection.php");
 
 $query = "SELECT SUBSTRING(qna_pago,1,4) AS 'year' FROM indicador GROUP BY year ASC";
-$queryC = "SELECT cve_cpto AS 'concepto' FROM `cat_conceptos`";
+$queryC = "SELECT cve_cpto, concepto FROM `cat_conceptos`";
 //$query = "SELECT SUBSTRING(qna_pago,1,4) AS 'year' FROM indicador GROUP BY year DESC";
-$queryM = "SELECT * FROM `cat_mes` GROUP BY MES ORDER BY id_quin";
+$queryM = "SELECT mes,id_mes,nombre FROM `cat_mes` JOIN nom_mes ON cat_mes.mes = nom_mes.id_mes GROUP BY mes ORDER BY id_quin";
 
 $statement = $connect->prepare($query);
 $statementC = $connect->prepare($queryC);
@@ -39,7 +39,7 @@ $resultM = $statementM->fetchAll();
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
-
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script> 
     
   </head>
@@ -114,6 +114,26 @@ $resultM = $statementM->fetchAll();
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
           <div class="container-fluid">
+            <!-- Modal -->
+   <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          
+          <h4 class="modal-title">Modal</h4>
+        </div>
+        <div class="modal-body" id="body">
+          <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 
             <button type="button" id="sidebarCollapse" class="btn btn-primary">
               <i class="fa fa-bars"></i>
@@ -188,7 +208,7 @@ $resultM = $statementM->fetchAll();
                             <?php
                             foreach($resultC as $row)
                             {
-                                echo '<option value="'.$row["concepto"].'">'.$row["concepto"].'</option>';
+                                echo '<option value="'.$row["cve_cpto"].'">'.$row["concepto"].', codigo: '.$row["cve_cpto"].'</option>';
                             }
                             ?>
                 </select>
@@ -199,7 +219,7 @@ $resultM = $statementM->fetchAll();
                             <?php
                             foreach($resultM as $row)
                             {
-                                echo '<option value="'.$row["mes"].'">'.$row["mes"].'</option>';
+                                echo '<option value="'.$row["mes"].'">'.$row["nombre"].'</option>';
                             }
                             ?>
                 </select>
@@ -249,7 +269,7 @@ $resultM = $statementM->fetchAll();
   </body>
 </html>
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="./charts/loader.js"></script>
 <script type="text/javascript">
 google.charts.load('current', {packages: ['corechart', 'bar']});
 google.charts.setOnLoadCallback();
@@ -332,20 +352,15 @@ function drawMonthwiseChart(chart_data, chart_main_title)
         var style = jsonData.style;
         data.addRows([[concepto, importe, style]]);
     });
-   
 
-    data.setValue(0, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    
-    data.setValue(1, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(2, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(3, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(4, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(5, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(6, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(7, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    
+   var axis = data.getNumberOfRows();
+   //alert('max data table value: ' + axis);
+   for(var x=0;x<axis;x++){
+    data.setValue(x, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+   }
+
     var options = {
-        title:chart_main_title,
+        title:chart_main_title, 
         legend: 'none',
         hAxis: {
             title: "Quincenas"
@@ -366,7 +381,18 @@ function drawMonthwiseChart(chart_data, chart_main_title)
 
     var chart = new google.visualization.ColumnChart(document.getElementById('chart_area'));
     chart.draw(data, options);
+    
+    google.visualization.events.addListener(chart, 'select', selectHandler);
+    function selectHandler() {
+      var selection = chart.getSelection()[0];
+      var selectedValue = data.getValue(selection.row, 0);
+      var selectedImporte = data.getValue(selection.row, 1);
+    alert('Seleccionaste el Mes:' + ' ' + selectedValue + ' ' +'con un Importe de:'+ ' ' + selectedImporte);
+    $("#body").html('Seleccionaste el Mes:' + ' ' + selectedValue + ' ' +'con un Importe de:'+ ' ' + selectedImporte);
+    $("#myModal").modal();
 }
+}
+
 // dibujar grafica 2
 function drawMonthwiseChart2(chart_data, chart_main_title)
 {
@@ -386,23 +412,11 @@ function drawMonthwiseChart2(chart_data, chart_main_title)
 
 
     });
-    data.setValue(0, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-   
-    data.setValue(1, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(2, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(3, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(4, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(5, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(6, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(7, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(8, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(9, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(10, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(11, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(12, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(13, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    data.setValue(14, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
-    
+    var axis = data.getNumberOfRows();
+    //alert('max data table value: ' + axis.max);
+    for(var x=0;x<axis;x++){
+    data.setValue(x, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+   }
     
 
     var options = {
@@ -446,7 +460,16 @@ function drawMonthwiseChart3(chart_data, chart_main_title)
 
 
     });
-
+    var axis = data.getNumberOfRows();
+    //alert('max data table value: ' + axis);
+    for(var x=0;x<axis;x++){
+    data.setValue(x, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+   }
+    /*
+    for(var x=0;x<axis.max;x++){
+    data.setValue(x, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+   }
+   */
     var options = {
         title:chart_main_title,
         legend: 'none',
