@@ -13,6 +13,7 @@ $queryC = "SELECT cve_cpto, concepto FROM `cat_conceptos`";
 //$query = "SELECT SUBSTRING(qna_pago,1,4) AS 'year' FROM indicador GROUP BY year DESC";
 $queryM = "SELECT mes,id_mes,nombre FROM `cat_mes` JOIN nom_mes ON cat_mes.mes = nom_mes.id_mes GROUP BY mes ORDER BY id_quin";
 
+
 $statement = $connect->prepare($query);
 $statementC = $connect->prepare($queryC);
 $statementM = $connect->prepare($queryM);
@@ -135,6 +136,7 @@ $resultM = $statementM->fetchAll();
     </div>
   </div>
 
+
             <button type="button" id="sidebarCollapse" class="btn btn-primary">
               <i class="fa fa-bars"></i>
               <span class="sr-only">Toggle Menu</span>
@@ -183,8 +185,20 @@ $resultM = $statementM->fetchAll();
             
           </div>
           <div class="panel-body">
+            <table class="table table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Mes</th>
+                  <th scope="col">Importe</th>
+                </tr>
+              </thead>
+              <tbody  id="col1">
+
+              </tbody>
+            </table>
            
               <div id="chart_area" style="width: 1200px; height: 500px;"></div>
+              
             
           </div>
           
@@ -272,6 +286,8 @@ $resultM = $statementM->fetchAll();
 <script type="text/javascript" src="./charts/loader.js"></script>
 <script type="text/javascript">
 google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.load('current', {'packages':['table']});
+//google.charts.load('current', {packages: ['table']});
 google.charts.setOnLoadCallback();
 
 
@@ -287,6 +303,7 @@ function load_conceptowise_data(id, title)
         success:function(data)
         {
             drawMonthwiseChart(data, temp_title);
+            
         },
         error: function(data)
         {
@@ -337,6 +354,9 @@ function load_conceptowise3_data(idc, idm, title)
 function drawMonthwiseChart(chart_data, chart_main_title)
 {
     var jsonData = chart_data;
+    //
+    var tablaData ='';
+    //
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Quincenas');
     data.addColumn('number', 'Importe $');
@@ -345,19 +365,32 @@ function drawMonthwiseChart(chart_data, chart_main_title)
                role: 'style'
            });
 
-
+   $('#col1').empty();
     $.each(jsonData, function(i, jsonData){
         var concepto = jsonData.concepto;
         var importe = parseFloat($.trim(jsonData.importe));
         var style = jsonData.style;
         data.addRows([[concepto, importe, style]]);
+        /////////
+        tablaData += '<tr>';
+        tablaData += '<td>'+jsonData.concepto+'</td>';
+        tablaData += '<td>'+jsonData.importe+'</td>';
+        tablaData += '</tr>';
+        /////////
+
     });
 
    var axis = data.getNumberOfRows();
-   //alert('max data table value: ' + axis);
+   //alert('max data table value: ' + data.getValue(0, 0));
    for(var x=0;x<axis;x++){
     data.setValue(x, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
+    //data.getValue(0,0)
+
    }
+
+ $("#col1").append(tablaData);
+
+
 
     var options = {
         title:chart_main_title, 
@@ -376,13 +409,15 @@ function drawMonthwiseChart(chart_data, chart_main_title)
     }
 }
 
-
     };
 
     var chart = new google.visualization.ColumnChart(document.getElementById('chart_area'));
+    //var visualization = new google.visualization.Table(document.getElementById('chart_areas'));
     chart.draw(data, options);
-    
+    //visualization.draw(data);
+
     google.visualization.events.addListener(chart, 'select', selectHandler);
+
     function selectHandler() {
       var selection = chart.getSelection()[0];
       var selectedValue = data.getValue(selection.row, 0);
@@ -392,6 +427,9 @@ function drawMonthwiseChart(chart_data, chart_main_title)
     $("#myModal").modal();
 }
 }
+/////tabla
+
+
 
 // dibujar grafica 2
 function drawMonthwiseChart2(chart_data, chart_main_title)
