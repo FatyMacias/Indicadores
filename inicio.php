@@ -179,13 +179,40 @@ $resultM = $statementM->fetchAll();
                 </select>
           </div>
 
-          <div class="panel-body">
-           
-              <div style="width: 200px; height: 10px;"></div>
-            
+          <div class="panel-body" >
+
+          <div style="width: 200px; height: 10px;"></div>
           </div>
           <div class="panel-body">
-            <table class="table table-hover">
+
+<div class="table-bordered table-responsive text-center">
+<table class="table table-hover table-bordered" style="border: 1px solid #ddd !important;">
+    <tbody>
+      <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Meses</th>
+                </tr>
+        </thead>
+        <tr id="col1">
+          
+        </tr>
+        <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Importe</th>
+                </tr>
+        </thead>
+        <tr id="col2">
+            
+        </tr>
+        <tr id="col2_1">
+            
+        </tr>
+     
+    </tbody>
+</table>
+</div>
+
+            <!--<table class="table table-hover">
               <thead class="thead-dark">
                 <tr>
                   <th scope="col">Meses</th>
@@ -195,24 +222,38 @@ $resultM = $statementM->fetchAll();
               <tbody  id="col1">
 
               </tbody>
-            </table>
+            </table>-->
            
               <div id="chart_area" style="width: 1200px; height: 500px; visibility: hidden;"></div>
               
-            
           </div>
           
-          <table class="table table-hover">
-              <thead class="thead-dark">
+          <div class="table-bordered table-responsive text-center">
+<table class="table table-hover table-bordered" style="border: 1px solid #ddd !important;">
+    <tbody>
+      <thead class="thead-dark">
                 <tr>
                   <th scope="col">Quincenas</th>
+                </tr>
+        </thead>
+        <tr id="col3">
+          
+        </tr>
+        <thead class="thead-dark">
+                <tr>
                   <th scope="col">Importe</th>
                 </tr>
-              </thead>
-              <tbody  id="col2">
-
-              </tbody>
-            </table>
+        </thead>
+        <tr id="col4">
+            
+        </tr>
+        <tr id="col4_1">
+            
+        </tr>
+     
+    </tbody>
+</table>
+</div>
           <div class="panel-body">
             
               <div id="chart_area2" style="width: 1200px; height: 500px; visibility: hidden;"></div>
@@ -268,6 +309,7 @@ $resultM = $statementM->fetchAll();
                   }
               document.getElementById(menuName).style.display = "block";  
             }
+            
 
             function show(){
               //document.getElementById('chart_area').visibility = "visible";
@@ -387,6 +429,8 @@ function drawMonthwiseChart(chart_data, chart_main_title)
     var jsonData = chart_data;
     //
     var tablaData ='';
+    var tablaData2 ='';
+    var tablaData3 ='';
     //
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Quincenas');
@@ -397,29 +441,37 @@ function drawMonthwiseChart(chart_data, chart_main_title)
            });
 
    $('#col1').empty();
+   $('#col2').empty();
+   $('#col2_1').empty();
     $.each(jsonData, function(i, jsonData){
+      
         var concepto = jsonData.concepto;
         var importe = parseFloat($.trim(jsonData.importe));
         var style = jsonData.style;
         data.addRows([[concepto, importe, style]]);
         /////////
-        tablaData += '<tr>';
+        //tablaData += '<tr>';
         tablaData += '<td>'+jsonData.concepto+'</td>';
-        tablaData += '<td>'+'$'+jsonData.importe+'</td>';
-        tablaData += '</tr>';
+        tablaData2 += '<td>'+'$'+jsonData.importe+'</td>';
+        //tablaData += '</tr>';
+        //tablaData += '<tr>';
+        //tablaData += '<td>'+'$'+jsonData.importe+'</td>';
+        //tablaData += '</tr>';
         /////////
 
     });
-   tablaData += '<td> <input type="button" class="btn btn-info" value="Ocultar/Mostrar Grafica" onclick="show()"> </td>';
+   tablaData3 += '<td> <input type="button" class="btn btn-info" value="Ocultar/Mostrar Grafica" onclick="show()"> </td>';
    var axis = data.getNumberOfRows();
    //alert('max data table value: ' + data.getValue(0, 0));
    for(var x=0;x<axis;x++){
     data.setValue(x, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
     //data.getValue(0,0)
-
    }
 
  $("#col1").append(tablaData);
+ $("#col2").append(tablaData2);
+ $("#col2_1").append(tablaData3);
+
 
     var options = {
         title:chart_main_title, 
@@ -467,6 +519,8 @@ function drawMonthwiseChart2(chart_data, chart_main_title)
 {
     var jsonData = chart_data;
     var tablaData ='';
+    var tablaData2 ='';
+    var tablaData3 ='';
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Quincenas');
     data.addColumn('number', 'Importe $');
@@ -474,28 +528,30 @@ function drawMonthwiseChart2(chart_data, chart_main_title)
                type: 'string',
                role: 'style'
            });
-    $('#col2').empty();
+    $('#col3').empty();
+    $('#col4').empty();
+    $('#col4_1').empty();
     $.each(jsonData, function(i, jsonData){
         var concepto = jsonData.concepto;
         var importe = parseFloat($.trim(jsonData.importe));
         var style = jsonData.style;
         data.addRows([[concepto, importe, style]]);
 
-        tablaData += '<tr>';
         tablaData += '<td>'+jsonData.concepto+'</td>';
-        tablaData += '<td>'+'$'+jsonData.importe+'</td>';
-        tablaData += '</tr>';
+        tablaData2 += '<td>'+'$'+jsonData.importe+'</td>';
 
 
     });
-     tablaData += '<td> <input type="button" class="btn btn-info" value="Ocultar/Mostrar Grafica" onclick="show2()"> </td>';
+     tablaData3 += '<td> <input type="button" class="btn btn-info" value="Ocultar/Mostrar Grafica" onclick="show2()"> </td>';
     var axis = data.getNumberOfRows();
     //alert('max data table value: ' + axis.max);
     for(var x=0;x<axis;x++){
     data.setValue(x, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
    }
     
-    $("#col2").append(tablaData);
+    $("#col3").append(tablaData);
+    $("#col4").append(tablaData2);
+    $("#col4_1").append(tablaData3);
     var options = {
         title:chart_main_title,
         legend: 'none',
