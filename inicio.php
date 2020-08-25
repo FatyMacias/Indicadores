@@ -272,20 +272,20 @@ $resultM = $statementM->fetchAll();
             function show(){
               //document.getElementById('chart_area').visibility = "visible";
               var x = document.getElementById('chart_area');
-              if (x.style.display === 'none') {
-                  x.style.display = 'initial';
+              if (x.style.visibility === 'hidden') {
+                  x.style.visibility = 'visible';
               } else {
-                  x.style.display = 'none';
+                  x.style.visibility = 'hidden';
               }
                
             }
             function show2(){
               //document.getElementById('chart_area').visibility = "visible";
               var x = document.getElementById('chart_area2');
-              if (x.style.display === 'none') {
-                  x.style.display = 'initial';
+              if (x.style.visibility === 'hidden') {
+                  x.style.visibility = 'visible';
               } else {
-                  x.style.display = 'none';
+                  x.style.visibility = 'hidden';
               }
                
             }
