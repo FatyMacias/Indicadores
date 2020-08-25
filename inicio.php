@@ -452,7 +452,10 @@ function drawMonthwiseChart(chart_data, chart_main_title)
       var selectedValue = data.getValue(selection.row, 0);
       var selectedImporte = data.getValue(selection.row, 1);
     alert('Seleccionaste el Mes:' + ' ' + selectedValue + ' ' +'con un Importe de:'+ ' ' + selectedImporte);
-    $("#body").html('Seleccionaste el Mes:' + ' ' + selectedValue + ' ' +'con un Importe de:'+ ' ' + selectedImporte);
+    $("#body").html('Fuente: <strong>U080</strong>, importe total:'+ ' ' +'$'+ selectedImporte/4+'<br>'+
+      'Fuente: <strong>Estatal</strong>, importe total:'+ ' ' +'$'+ selectedImporte/4+'<br>'+
+      'Fuente: <strong>Propios</strong>, importe total:'+ ' ' + '$'+selectedImporte/4+'<br>'+
+      'Fuente: <strong>Fone Otros</strong>, importe total:'+ ' ' +'$'+ selectedImporte/4+'<br>');
     $("#myModal").modal();
 }
 }
