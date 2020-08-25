@@ -197,7 +197,7 @@ $resultM = $statementM->fetchAll();
               </tbody>
             </table>
            
-              <div id="chart_area" style="width: 1200px; height: 500px;"></div>
+              <div id="chart_area" style="width: 1200px; height: 500px; visibility: hidden;"></div>
               
             
           </div>
@@ -215,7 +215,7 @@ $resultM = $statementM->fetchAll();
             </table>
           <div class="panel-body">
             
-              <div id="chart_area2" style="width: 1200px; height: 500px;"></div>
+              <div id="chart_area2" style="width: 1200px; height: 500px; visibility: hidden;"></div>
               
           </div>
           
