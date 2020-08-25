@@ -188,7 +188,7 @@ $resultM = $statementM->fetchAll();
             <table class="table table-hover">
               <thead class="thead-dark">
                 <tr>
-                  <th scope="col">Mes</th>
+                  <th scope="col">Meses</th>
                   <th scope="col">Importe</th>
                 </tr>
               </thead>
@@ -202,7 +202,17 @@ $resultM = $statementM->fetchAll();
             
           </div>
           
-          
+          <table class="table table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Quincenas</th>
+                  <th scope="col">Importe</th>
+                </tr>
+              </thead>
+              <tbody  id="col2">
+
+              </tbody>
+            </table>
           <div class="panel-body">
             
               <div id="chart_area2" style="width: 1200px; height: 500px;"></div>
@@ -257,6 +267,27 @@ $resultM = $statementM->fetchAll();
                     x[i].style.display = "none";  
                   }
               document.getElementById(menuName).style.display = "block";  
+            }
+
+            function show(){
+              //document.getElementById('chart_area').visibility = "visible";
+              var x = document.getElementById('chart_area');
+              if (x.style.display === 'none') {
+                  x.style.display = 'initial';
+              } else {
+                  x.style.display = 'none';
+              }
+               
+            }
+            function show2(){
+              //document.getElementById('chart_area').visibility = "visible";
+              var x = document.getElementById('chart_area2');
+              if (x.style.display === 'none') {
+                  x.style.display = 'initial';
+              } else {
+                  x.style.display = 'none';
+              }
+               
             }
           </script>
           
@@ -374,12 +405,12 @@ function drawMonthwiseChart(chart_data, chart_main_title)
         /////////
         tablaData += '<tr>';
         tablaData += '<td>'+jsonData.concepto+'</td>';
-        tablaData += '<td>'+jsonData.importe+'</td>';
+        tablaData += '<td>'+'$'+jsonData.importe+'</td>';
         tablaData += '</tr>';
         /////////
 
     });
-
+   tablaData += '<td> <input type="button" class="btn btn-info" value="Ocultar/Mostrar Grafica" onclick="show()"> </td>';
    var axis = data.getNumberOfRows();
    //alert('max data table value: ' + data.getValue(0, 0));
    for(var x=0;x<axis;x++){
@@ -389,8 +420,6 @@ function drawMonthwiseChart(chart_data, chart_main_title)
    }
 
  $("#col1").append(tablaData);
-
-
 
     var options = {
         title:chart_main_title, 
@@ -410,7 +439,7 @@ function drawMonthwiseChart(chart_data, chart_main_title)
 }
 
     };
-
+ 
     var chart = new google.visualization.ColumnChart(document.getElementById('chart_area'));
     //var visualization = new google.visualization.Table(document.getElementById('chart_areas'));
     chart.draw(data, options);
@@ -430,11 +459,11 @@ function drawMonthwiseChart(chart_data, chart_main_title)
 /////tabla
 
 
-
 // dibujar grafica 2
 function drawMonthwiseChart2(chart_data, chart_main_title)
 {
     var jsonData = chart_data;
+    var tablaData ='';
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Quincenas');
     data.addColumn('number', 'Importe $');
@@ -442,21 +471,28 @@ function drawMonthwiseChart2(chart_data, chart_main_title)
                type: 'string',
                role: 'style'
            });
+    $('#col2').empty();
     $.each(jsonData, function(i, jsonData){
         var concepto = jsonData.concepto;
         var importe = parseFloat($.trim(jsonData.importe));
         var style = jsonData.style;
         data.addRows([[concepto, importe, style]]);
 
+        tablaData += '<tr>';
+        tablaData += '<td>'+jsonData.concepto+'</td>';
+        tablaData += '<td>'+'$'+jsonData.importe+'</td>';
+        tablaData += '</tr>';
+
 
     });
+     tablaData += '<td> <input type="button" class="btn btn-info" value="Ocultar/Mostrar Grafica" onclick="show2()"> </td>';
     var axis = data.getNumberOfRows();
     //alert('max data table value: ' + axis.max);
     for(var x=0;x<axis;x++){
     data.setValue(x, 2, '#'+Math.floor(Math.random()*16777215).toString(16));
    }
     
-
+    $("#col2").append(tablaData);
     var options = {
         title:chart_main_title,
         legend: 'none',
