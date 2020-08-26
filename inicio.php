@@ -451,8 +451,8 @@ function drawMonthwiseChart(chart_data, chart_main_title)
         data.addRows([[concepto, importe, style]]);
         /////////
         //tablaData += '<tr>';
-        tablaData += '<td>'+jsonData.concepto+'</td>';
-        tablaData2 += '<td>'+'$'+jsonData.importe+'</td>';
+        tablaData += '<td>'+concepto+'</td>';
+        tablaData2 += '<td>'+'$'+importe.toFixed(2)+'</td>';
         //tablaData += '</tr>';
         //tablaData += '<tr>';
         //tablaData += '<td>'+'$'+jsonData.importe+'</td>';
@@ -503,11 +503,11 @@ function drawMonthwiseChart(chart_data, chart_main_title)
       var selection = chart.getSelection()[0];
       var selectedValue = data.getValue(selection.row, 0);
       var selectedImporte = data.getValue(selection.row, 1);
-    alert('Seleccionaste el Mes:' + ' ' + selectedValue + ' ' +'con un Importe de:'+ ' ' + selectedImporte);
-    $("#body").html('Fuente: <strong>U080</strong>, importe total:'+ ' ' +'$'+ selectedImporte/4+'<br>'+
-      'Fuente: <strong>Estatal</strong>, importe total:'+ ' ' +'$'+ selectedImporte/4+'<br>'+
-      'Fuente: <strong>Propios</strong>, importe total:'+ ' ' + '$'+selectedImporte/4+'<br>'+
-      'Fuente: <strong>Fone Otros</strong>, importe total:'+ ' ' +'$'+ selectedImporte/4+'<br>');
+    alert('Seleccionaste el Mes:' + ' ' + selectedValue.toFixed(2) + ' ' +'con un Importe de:'+ ' ' + selectedImporte);
+    $("#body").html('Fuente: <strong>U080</strong>, importe total:'+ ' ' +'$'+ selectedImporte.toFixed(2)/4+'<br>'+
+      'Fuente: <strong>Estatal</strong>, importe total:'+ ' ' +'$'+ selectedImporte.toFixed(2)/4+'<br>'+
+      'Fuente: <strong>Propios</strong>, importe total:'+ ' ' + '$'+selectedImporte.toFixed(2)/4+'<br>'+
+      'Fuente: <strong>Fone Otros</strong>, importe total:'+ ' ' +'$'+ selectedImporte.toFixed(2)/4+'<br>');
     $("#myModal").modal();
 }
 }
@@ -537,8 +537,8 @@ function drawMonthwiseChart2(chart_data, chart_main_title)
         var style = jsonData.style;
         data.addRows([[concepto, importe, style]]);
 
-        tablaData += '<td>'+jsonData.concepto+'</td>';
-        tablaData2 += '<td>'+'$'+jsonData.importe+'</td>';
+        tablaData += '<td>'+concepto+'</td>';
+        tablaData2 += '<td>'+'$'+importe.toFixed(2)+'</td>';
 
 
     });
@@ -664,4 +664,3 @@ $(document).ready(function(){
 });
 
 </script>
-
